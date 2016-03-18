@@ -1,0 +1,102 @@
+package arvore;
+
+public class ControleArvore {
+
+	public void adicionar(No no, int valor) {
+		if (valor > no.getValor()) {
+			// vá para direita
+			if (no.getDireita() == null) {
+				no.setDireita(new No(valor));
+			} else {
+				adicionar(no.getDireita(), valor);
+			}
+		}else{
+			if(no.getEsquerda()==null){ //esq. tá vazio?
+				no.setEsquerda(new No(valor));
+			}else{
+				adicionar(no.getEsquerda(), valor);
+			}
+		}
+
+	}
+	public void preordem(No no){
+		if(no!=null){
+			System.out.print(no.getValor()+" ");
+			preordem(no.getEsquerda());
+			preordem(no.getDireita());
+		}
+	}
+	public void posordem(No no){
+		if(no!=null){
+			posordem(no.getEsquerda());
+			posordem(no.getDireita());
+			System.out.print(no.getValor()+" ");
+			
+		}
+	}
+	public void emordem(No no){
+		if(no!=null){
+			emordem(no.getEsquerda());
+			System.out.print(no.getValor()+" ");
+			emordem(no.getDireita());
+			
+		}
+	}
+	
+	private No removeAtual(No atual){
+		//Caso 1: Ser for folha (sem filhos) - remove.
+		//Caso 2: Se tiver apenas 1 filho, muda a referência.
+		//Caso 3: Se tiver 2 filhos, o bicho pega! 
+		//A última folha da sub-arvore a esquerda, e colocar no nó removido
+		if(atual.getEsquerda() == null){ //caso 2: sem filho a esquerda. Aponta para o elemento da direita.
+			return atual.getDireita();
+		}
+		No no1 = atual, no2 = atual.getEsquerda();
+		while(no2.getDireita() !=null){ // caso 3! o Punk!
+			no1 = no2;
+			no2 = no2.getDireita();
+		} 
+		
+		if(no1 != atual){//realiza a remoção
+			no1.setDireita(no2.getEsquerda());
+			no2.setEsquerda(atual.getEsquerda());
+		}
+		no2.setDireita(atual.getDireita());
+		
+		return no2;
+	}
+	public boolean removeNo(No no,int valor){
+		
+		if(no==null) return false; //arvore vazia não faz nada!!
+		
+		No anterior = null;
+		No atual = no;
+		while(atual!=null){ //percorre a árvore
+			if(valor == atual.getValor()){ //verifica o valor
+				if(atual.getValor()==no.getValor()){ //se remover a raiz
+					no = removeAtual(atual);
+				}else{
+					if(anterior.getDireita().getValor() == atual.getValor()){ 
+						// se encontrar o elemento a direita, a ser removido, 
+						//altera o valor do nó direito.
+						anterior.setDireita(removeAtual(atual));
+					}else{
+						anterior.setEsquerda(removeAtual(atual)); 
+						// se não, remove o da esquerda.
+					}
+				}
+				return true;
+			}
+			anterior = atual;
+			if(valor> atual.getValor()){ 
+				atual = atual.getDireita(); //se maior a direita
+			}else{
+				atual = atual.getEsquerda(); //se menor a esquerda
+			}
+		}
+		return false;
+		
+		
+	}
+	
+}

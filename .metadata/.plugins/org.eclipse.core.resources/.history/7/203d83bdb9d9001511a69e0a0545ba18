@@ -1,0 +1,23 @@
+package agenda;
+
+public class AgendaDupla {
+
+	private Contato primeiro;
+	private Contato auxiliar;
+	
+	public void adicionarComeco(Contato contato){
+		if(primeiro == null){
+			primeiro = contato;
+			auxiliar = contato;
+		}else{
+			contato.setProximo(primeiro);
+			primeiro.setAnterior(contato);//+
+			primeiro = contato;
+		}
+	}
+	
+	public void adicionarFim(Contato contato){
+		
+	}
+	
+}

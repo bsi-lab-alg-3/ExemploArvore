@@ -1,0 +1,97 @@
+package arvore;
+
+public class ControleArvore {
+
+	public void adicionar(No no, int valor) {
+		if (no.getValor() < valor) {
+			// vá para direita
+			if (no.getDireita() == null) {
+				no.setDireita(new No(valor));
+			} else {
+				adicionar(no.getDireita(), valor);
+			}
+		}else{
+			if(no.getEsquerda()==null){ //esq. tá vazio?
+				no.setEsquerda(new No(valor));
+			}else{
+				adicionar(no.getEsquerda(), valor);
+			}
+		}
+
+	}
+	public void preordem(No no){
+		if(no!=null){
+			System.out.print(no.getValor()+" ");
+			preordem(no.getEsquerda());
+			preordem(no.getDireita());
+		}
+	}
+	public void posordem(No no){
+		if(no!=null){
+			posordem(no.getEsquerda());
+			posordem(no.getDireita());
+			System.out.print(no.getValor()+" ");
+			
+		}
+	}
+	public void emordem(No no){
+		if(no!=null){
+			emordem(no.getEsquerda());
+			System.out.print(no.getValor()+" ");
+			emordem(no.getDireita());
+			
+		}
+	}
+	
+	private No removeAtual(No atual){
+		//Caso 1: Ser for folha (sem filhos remove).
+		//Caso 2: Se tiver apenas 1 filho, muda a referência.
+		//Caso 3: Se tiver 2 filhos, o bicho pega! A última folha da sub-arvore a esquerda, e colocar no nó removido
+		if(atual.getEsquerda() == null){ //caso 2: sem filho a esquerda. Aponta para o elemento da direita.
+			return atual.getDireita();
+		}
+		No no1 = atual, no2 = atual.getEsquerda();
+		while(no2.getDireita() !=null){ // caso 3! o Punk!
+			no1 = no2;
+			no2 = no2.getDireita();
+		} 
+		
+		if(no1 != atual){
+			no1.setDireita(no2.getEsquerda());
+			no2.setEsquerda(atual.getEsquerda());
+		}
+		no2.setDireita(atual.getDireita());
+		
+		return no2;
+	}
+	public boolean removeNo(No no,int valor){
+		
+		if(no==null) return false; //arvore vazia
+		
+		No anterior = null;
+		No atual = no;
+		while(atual!=null){
+			if(valor == atual.getValor()){
+				if(atual==no){
+					removeAtual(atual);
+				}else{
+					if(anterior.getDireita() == atual){
+						anterior.setDireita(removeAtual(atual));
+					}else{
+						anterior.setEsquerda(removeAtual(atual));
+					}
+				}
+				return true;
+			}
+			anterior = atual;
+			if(valor> atual.getValor()){
+				atual = atual.getDireita();
+			}else{
+				atual = atual.getEsquerda();
+			}
+		}
+		
+		
+	}
+	
+}

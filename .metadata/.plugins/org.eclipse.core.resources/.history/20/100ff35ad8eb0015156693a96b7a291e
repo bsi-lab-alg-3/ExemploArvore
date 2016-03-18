@@ -1,0 +1,19 @@
+package br.com.exemplo;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class ExemploTesteCase {
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void exemploSucesso(){
+		assertEquals(1, 1);
+	}
+
+}
