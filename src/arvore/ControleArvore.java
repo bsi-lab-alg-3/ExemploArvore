@@ -10,116 +10,102 @@ public class ControleArvore {
 			} else {
 				adicionar(no.getDireita(), valor);
 			}
-		}else{
-			if(no.getEsquerda()==null){ //esq. tá vazio?
+		} else {
+			if (no.getEsquerda() == null) { // esq. tá vazio?
 				no.setEsquerda(new No(valor));
-			}else{
+			} else {
 				adicionar(no.getEsquerda(), valor);
 			}
 		}
 
 	}
-	public No buscarLaco(No no, int valor){
+
+	public No buscarLaco(No no, int valor) {
 		No auxiliar = no;
-		while(auxiliar!=null){
-			if(valor==auxiliar.getValor()){
+		while (auxiliar != null) {
+			if (valor == auxiliar.getValor()) {
 				return auxiliar;
-			}else if(valor > auxiliar.getValor()){
+			} else if (valor > auxiliar.getValor()) {
 				auxiliar = no.getDireita();
-			} else{
+			} else {
 				auxiliar = no.getEsquerda();
 			}
 		}
 		return null;
 	}
-	
-	public No buscar(No no, int valor){
-		if(no.getValor() == valor){
+
+	public No buscar(No no, int valor) {
+		if (no.getValor() == valor) {
 			return no;
-		}else if(valor > no.getValor()){
-			return buscar(no.getDireita(),valor);
-		} else{
-			return buscar(no.getEsquerda(),valor);
+		} else if (valor > no.getValor()) {
+			return buscar(no.getDireita(), valor);
+		} else {
+			return buscar(no.getEsquerda(), valor);
 		}
 	}
-	public void preordem(No no){
-		if(no!=null){
-			System.out.print(no.getValor()+" ");
-			preordem(no.getEsquerda());
-			preordem(no.getDireita());
-		}
+
+	public String preordem(No no) {
+		return preordem(no, "").trim();
 	}
-	public void posordem(No no){
-		if(no!=null){
-			posordem(no.getEsquerda());
-			posordem(no.getDireita());
-			System.out.print(no.getValor()+" ");
-			
+
+	public String preordem(No no, String retorno) {
+		if (no != null) {
+			retorno += no.getValor() + " ";
+			retorno = preordem(no.getEsquerda(), retorno);
+			retorno = preordem(no.getDireita(), retorno);
 		}
+		return retorno;
 	}
-	public void emordem(No no){
-		if(no!=null){
-			emordem(no.getEsquerda());
-			System.out.print(no.getValor()+" ");
-			emordem(no.getDireita());
-			
+
+	public String posordem(No no, String retorno) {
+		if (no != null) {
+			retorno = posordem(no.getEsquerda(), retorno);
+			retorno = posordem(no.getDireita(), retorno);
+			retorno += no.getValor() + " ";
 		}
+		return retorno;
 	}
-	
-	private No removeAtual(No atual){
-		//Caso 1: Ser for folha (sem filhos) - remove.
-		//Caso 2: Se tiver apenas 1 filho, muda a referência.
-		//Caso 3: Se tiver 2 filhos, o bicho pega! 
-		//A última folha da sub-arvore a esquerda, e colocar no nó removido
-		if(atual.getEsquerda() == null){ //caso 2: sem filho a esquerda. Aponta para o elemento da direita.
-			return atual.getDireita();
+
+	public String emordem(No no, String retorno) {
+		if (no != null) {
+			retorno = emordem(no.getEsquerda(), retorno);
+			retorno += no.getValor() + " ";
+			retorno = emordem(no.getDireita(), retorno);
 		}
-		No no1 = atual, no2 = atual.getDireita();
-		while(no2.getEsquerda() !=null){ // caso 3! o Punk!
-			no1 = no2;
-			no2 = no2.getEsquerda();
-		} 
-		
-		if(no1 != atual){//realiza a remoção
-			no1.setDireita(no2.getEsquerda());
-			no2.setEsquerda(atual.getEsquerda());
-		}
-		no2.setDireita(atual.getDireita());
-		
-		return no2;
+		return retorno;
 	}
-	public boolean removeNo(No no,int valor){
-		
-		if(no==null) return false; //arvore vazia não faz nada!!
-		
-		No anterior = null;
-		No atual = no;
-		while(atual!=null){ //percorre a árvore
-			if(valor == atual.getValor()){ //verifica o valor
-				if(atual.getValor()==no.getValor()){ //se remover a raiz
-					no = removeAtual(atual);
-				}else{
-					if(anterior.getDireita().getValor() == atual.getValor()){ 
-						// se encontrar o elemento a direita, a ser removido, 
-						//altera o valor do nó direito.
-						anterior.setDireita(removeAtual(atual));
-					}else{
-						anterior.setEsquerda(removeAtual(atual)); 
-						// se não, remove o da esquerda.
-					}
-				}
-				return true;
+
+	// http://geeksquiz.com/binary-search-tree-set-2-delete/
+	public void removerValor(No noAtual, int valor) {
+		noAtual = remover(noAtual, valor);
+	}
+
+	private No remover(No root, int key) {
+		if (root == null)
+			return root;
+
+		if (key < root.getValor()) {
+			root.setEsquerda(remover(root.getEsquerda(), key));
+		} else if (key > root.getValor()) {
+			root.setDireita(remover(root.getDireita(), key));
+		} else {
+			if (root.getEsquerda() == null)
+				return root.getEsquerda();
+			else if (root.getDireita() == null)
+				return root.getDireita();
+
+			No controle = root.getDireita();
+			int minv = controle.getValor();
+			while (controle.getEsquerda() != null) {
+				minv = controle.getEsquerda().getValor();
+				controle = controle.getEsquerda();
 			}
-			anterior = atual;
-			if(valor> atual.getValor()){ 
-				atual = atual.getDireita(); //se maior a direita
-			}else{
-				atual = atual.getEsquerda(); //se menor a esquerda
-			}
+			root.setValor(minv);
+
+			root.setDireita(remover(root.getDireita(), root.getValor()));
 		}
-		return false;
-		
-		
+
+		return root;
 	}
-	
+
 }

@@ -11,17 +11,18 @@ public class Principal {
 		controleArvore.adicionar(noRaiz, 30);
 		controleArvore.adicionar(noRaiz, 45);
 		controleArvore.adicionar(noRaiz, 34);
+		controleArvore.adicionar(noRaiz, 25);
 		controleArvore.adicionar(noRaiz, 32);
 		controleArvore.adicionar(noRaiz, 35);
 		System.out.println("Pré Ordem");
 		
-		controleArvore.preordem(noRaiz);
-		System.out.println();
+		
+		System.out.println(controleArvore.preordem(noRaiz));
 		//controleArvore.posordem(noRaiz);
-		System.out.println("Removendo o 40");
-		controleArvore.removeNo(noRaiz, 40);
+		System.out.println("Removendo o 30");
+		controleArvore.removerValor(noRaiz, 30);
 		System.out.println("Pré Ordem");
-		controleArvore.preordem(noRaiz);
+		System.out.println(controleArvore.preordem(noRaiz));
 	}
 
 }
